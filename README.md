@@ -2,18 +2,42 @@
 
 An automatic, numbered buffer history for Neovim, drawn in the winbar.
 
+![Demo: opening files adds them to a numbered bar in the winbar, Alt keys jump straight to each entry, and pausing freezes the list](demo/demo.gif)
+
 Every file you open is added to a short list across the top of the window. The newest is
 `1`, the one before it `2`, and so on. Jump to any of them with one home-row key, step
-back and forth through them, and drop the ones you're done with. It works like
-harpoon, except you never have to mark anything.
-
-```
-  1: init.lua    2: ui.lua   3: README.md   4: config.lua
-```
+back and forth through them, and drop the ones you're done with.
 
 The current buffer is highlighted, and each name gets its filetype icon if you have an
 icon plugin. Once the list grows past 7 entries, the other entries shrink to just their
 number and icon, e.g. `[3]`, so the bar stays on one line.
+
+## Where it fits
+
+bufswitch is a middle ground between the two usual ways of moving between files.
+
+- **Tab plugins** such as [bufferline.nvim](https://github.com/akinsho/bufferline.nvim)
+  and [barbar.nvim](https://github.com/romgrk/barbar.nvim) show a tab for every buffer
+  you open. You never have to manage them, but the bar keeps growing, and the file you
+  want can be anywhere along it, so you end up cycling through tabs or reading the bar
+  to find it.
+- **[harpoon](https://github.com/ThePrimeagen/harpoon)** puts a handful of files on
+  fixed keys. Switching is instant and your fingers learn where each file lives, but
+  only once you've marked the files, and the list changes only when you change it.
+
+bufswitch builds the list for you like a tab plugin, and switches like harpoon:
+
+- **Files join as you open them, newest first**, so whatever you're working on right
+  now has a low number.
+- **Revisiting a file doesn't reorder the bar.** Jumping between entries only moves the
+  highlight, so the numbers stay put until a new file joins at `1`.
+- **Every number has its own hotswitch key, and you pick the keys.** The defaults run
+  along the home row, `<A-a>` to `<A-l>`, but `keys.jump` takes any list of keys, as
+  long or as short as you like, e.g. `<leader>1`…`<leader>5`. See
+  [Examples](#examples).
+- **Pause when you want harpoon's fixed set.** New files stay off the bar until you add
+  them, so every entry keeps its number, and you can still drop the ones you're done
+  with.
 
 ## Contents
 
@@ -26,6 +50,7 @@ number and icon, e.g. `[3]`, so the bar stays on one line.
 - [Lua API](#lua-api)
 - [Highlights](#highlights)
 - [Putting the bar somewhere else](#putting-the-bar-somewhere-else)
+- [About this project](#about-this-project)
 
 ## How it behaves
 
@@ -293,6 +318,22 @@ opts = { winbar = false }
 vim.o.showtabline = 2
 vim.o.tabline = "%!v:lua.require'bufswitch'.render()"
 ```
+
+## About this project
+
+Bufswitch is a project that I started about three years ago. I never expected to open
+source it as it was just my internal way of using neovim, but I found that I literally
+can't use any other editor mainly because of the navigation with this plugin in
+combination with definition lookups and file searching. I felt the tree structure it
+provides keeps latest at the top, allowing to easily delete and move tab in one motion
+like harpoon with an auto attach. Feel free to fork and make your own version, or
+contribute. I'd appreciate if anyone opens a PR, and uses AI, please flag it clearly and
+note the actual signature changes in the PR comments. Hope someone else finds this
+useful!
+
+> [!NOTE]
+> Supported plugins are Oil and Avante, but expect some other edge cases to appear. This
+> was a personal project, so expect minimal hardening in current state.
 
 ## License
 
